@@ -155,6 +155,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Update navigation buttons
     prevBtn.disabled = currentQuestion === 0;
+    nextBtn.disabled = currentQuestion === 2;
+
   }
   
   // Check the answer
