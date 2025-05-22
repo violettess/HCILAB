@@ -48,16 +48,20 @@
       
       <!-- Questions -->
       <div id="quizContent">
-        <!-- First question by default -->
+        <!-- Question text -->
         <div class="quiz-question" id="question">Which dinosaur had a club-like tail and strong armor on its back?</div>
-        <div class="quiz-options" id="options">
-          <div class="quiz-option">A) Stegosaurus</div>
-          <div class="quiz-option">B) Velociraptor</div>
-          <div class="quiz-option">C) Parasaurolophus</div>
-          <div class="quiz-option">D) Ankylosaurus</div>
-          <div class="quiz-option">E) Triceratops</div>
+        
+        <!-- Image options grid -->
+        <div class="image-options-grid" id="options">
+          <!-- Images will be inserted by JavaScript -->
         </div>
         
+        <!-- Fun fact block (hidden by default) -->
+        <div class="fun-fact" id="funFact">
+          <div class="fun-fact-title">Did you know?</div>
+          <div id="funFactText"></div>
+        </div>
+
         <!-- Fun fact block (hidden by default) -->
         <div class="fun-fact" id="funFact">
           <div class="fun-fact-title">Did you know?</div>
@@ -67,7 +71,7 @@
       
       <div class="quiz-nav">
         <button class="prev-btn" id="prevBtn" disabled>Previous</button>
-        <button class="btn" id="checkAnswer">Check Answer</button>
+        <!-- <button class="btn" id="checkAnswer">Check Answer</button> -->
         <button class="next-btn" id="nextBtn">Next</button>
       </div>
     </div>
