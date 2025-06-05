@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   let currentQuestion = 0;
   let selectedOption = null;
-  let questionAnswered = false; // Track if current question has been answered
+  let questionAnswered = false;
   
   tabPull.addEventListener('click', function() {
     quizPage.style.right = '0';
@@ -98,10 +98,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const questionData = quizData[currentQuestion];
     
-    // Clear previous question content
     questionEl.innerHTML = '';
     
-    // Create question container with flex layout
     const questionContainer = document.createElement('div');
     questionContainer.style.display = 'flex';
     questionContainer.style.alignItems = 'center';
@@ -109,14 +107,12 @@ document.addEventListener('DOMContentLoaded', function() {
     questionContainer.style.gap = '20px';
     questionContainer.style.flexWrap = 'wrap';
     
-    // Add question text
     const questionText = document.createElement('span');
     questionText.textContent = questionData.question;
     questionText.style.flex = '1';
     questionText.style.minWidth = '300px';
     questionContainer.appendChild(questionText);
     
-    // Add dinosaur image if available
     if (questionData.questionImage) {
       const questionImg = document.createElement('img');
       questionImg.src = questionData.questionImage;
@@ -129,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
       questionImg.style.padding = '10px';
       questionImg.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
       
-      // Add error handling for question image
       questionImg.onerror = function() {
         this.style.display = 'none';
       };
@@ -157,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
       imageOption.appendChild(label);
       
       imageOption.addEventListener('click', function() {
-        // Prevent changing answer if already answered
+        
         if (questionAnswered) {
           return;
         }
@@ -165,12 +160,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const allOptions = optionsEl.querySelectorAll('.image-option');
         allOptions.forEach(function(opt) {
           opt.classList.remove('selected', 'correct', 'incorrect');
-          // Remove any existing cross icons
+        
           const existingCross = opt.querySelector('.cross-icon');
           if (existingCross) {
             existingCross.remove();
           }
-          // Remove any existing check icons
+      
           const existingCheck = opt.querySelector('.check-icon');
           if (existingCheck) {
             existingCheck.remove();
@@ -187,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     selectedOption = null;
-    questionAnswered = false; // Reset for new question
+    questionAnswered = false;
 
     funFactEl.style.display = 'none';
     
@@ -203,17 +198,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     clearResultIndicators();
     
-    // Mark correct answer and add check icon
     options[correctIndex].classList.add('correct');
     addCheckToOption(options[correctIndex]);
     
-    // If answer is incorrect, mark it and add cross
     if (selectedOption !== correctIndex) {
       options[selectedOption].classList.add('incorrect');
       addCrossToOption(options[selectedOption]);
     }
     
-    // Set question as answered to prevent further changes
     questionAnswered = true;
     
     funFactTextEl.textContent = quizData[currentQuestion].funFact;
