@@ -9,69 +9,73 @@ document.addEventListener('DOMContentLoaded', function() {
   const progressEl = document.getElementById('progress');
   const funFactEl = document.getElementById('funFact');
   const funFactTextEl = document.getElementById('funFactText');
-  
+
   const quizData = [
-    {
-      question: "Which dinosaur had a club-like tail and strong armor on its back?",
-      options: [
-        {
-          image: "asset/stegosaurus.png",
-          label: "Stegosaurus"
-        },
-        {
-          image: "asset/t-rex.png",
-          label: "T-rex"  
-        },
-        {
-          image: "asset/ankylosaurus.png",
-          label: "Ankylosaurus"
-        }
-      ],
-      correctIndex: 2, // Ankylosaurus
-      funFact: "The Ankylosaurus's club tail could generate enough force to break the bones of even the mighty T-Rex! Its armor plates were made of bone covered in keratin, the same material as human fingernails."
-    },
-    {
-      question: "What did the Spinosaurus mainly eat?",
-      options: [
-        {
-          image: "asset/fish.png",
-          label: "Fish"
-        },
-        {
-          image: "asset/plants.png",
-          label: "Plants"  
-        },
-        {
-          image: "asset/dino.png",
-          label: "Small dinosaurus"
-        }
-      ],
-      correctIndex: 2, // Fish
-      funFact: "Spinosaurus lived near rivers and lakes, making it perfectly suited to hunt fish. Its long jaws and conical teeth helped it catch slippery prey!"
-    },
-    {
-      question: "Where did the Triceratops usually live?",
-      options: [
-        {
-          image: "asset/jungle.png",
-          label: "Swampy jungles"
-        },
-        {
-          image: "asset/plains.png",
-          label: "Wetlands and plains"  
-        },
-        {
-          image: "asset/coast.png",
-          label: "Ocean coasts"
-        }
-      ],
-      correctIndex: 1, // Dry plains and forests
-      funFact: "Triceratops fossils are often found in what used to be open plains and woodland, ideal for grazing on low-lying plants."
-    }
-  ];
+  {
+    question: "Dinosaurus mana yang memiliki ekor seperti gada dan pelindung kuat di punggungnya?",
+    questionImage: null,
+    options: [
+      {
+        image: "asset/stegosaurus.png",
+        label: "Stegosaurus"
+      },
+      {
+        image: "asset/t-rex.png",
+        label: "T-rex"  
+      },
+      {
+        image: "asset/ankylosaurus.png",
+        label: "Ankylosaurus"
+      }
+    ],
+    correctIndex: 2,
+    funFact: "Ekor Ankylosaurus bisa menghasilkan pukulan sekuat itu hingga mampu mematahkan tulang T-Rex! Pelindung tubuhnya terbuat dari tulang yang dilapisi keratin, sama seperti kuku manusia."
+  },
+  {
+    question: "Apa makanan utama Spinosaurus?",
+    questionImage: "asset/spinosaurus.png",
+    options: [
+      {
+        image: "asset/fish.png",
+        label: "Ikan"
+      },
+      {
+        image: "asset/plants.png",
+        label: "Tumbuhan"  
+      },
+      {
+        image: "asset/dino.png",
+        label: "Dinosaurus kecil"
+      }
+    ],
+    correctIndex: 0,
+    funFact: "Spinosaurus hidup di dekat sungai dan danau, sangat cocok untuk berburu ikan. Rahangnya yang panjang dan gigi runcingnya membantunya menangkap mangsa licin!"
+  },
+  {
+    question: "Di mana Triceratops biasanya hidup?",
+    questionImage: "asset/triceratops.png",
+    options: [
+      {
+        image: "asset/jungle.png",
+        label: "Hutan rawa"
+      },
+      {
+        image: "asset/plains.png",
+        label: "Padang rumput dan lahan basah"  
+      },
+      {
+        image: "asset/coast.png",
+        label: "Pesisir laut"
+      }
+    ],
+    correctIndex: 1,
+    funFact: "Fosil Triceratops sering ditemukan di bekas padang rumput dan hutan terbuka, tempat ideal untuk memakan tanaman rendah."
+  }
+];
   
   let currentQuestion = 0;
   let selectedOption = null;
+  let questionAnswered = false; // Track if current question has been answered
   
   tabPull.addEventListener('click', function() {
     quizPage.style.right = '0';
@@ -92,11 +96,48 @@ document.addEventListener('DOMContentLoaded', function() {
   function loadQuestion() {
     progressEl.textContent = `Question ${currentQuestion + 1}/${quizData.length}`;
     
-
     const questionData = quizData[currentQuestion];
     
-
-    questionEl.textContent = questionData.question;
+    // Clear previous question content
+    questionEl.innerHTML = '';
+    
+    // Create question container with flex layout
+    const questionContainer = document.createElement('div');
+    questionContainer.style.display = 'flex';
+    questionContainer.style.alignItems = 'center';
+    questionContainer.style.justifyContent = 'center';
+    questionContainer.style.gap = '20px';
+    questionContainer.style.flexWrap = 'wrap';
+    
+    // Add question text
+    const questionText = document.createElement('span');
+    questionText.textContent = questionData.question;
+    questionText.style.flex = '1';
+    questionText.style.minWidth = '300px';
+    questionContainer.appendChild(questionText);
+    
+    // Add dinosaur image if available
+    if (questionData.questionImage) {
+      const questionImg = document.createElement('img');
+      questionImg.src = questionData.questionImage;
+      questionImg.alt = 'Dinosaur';
+      questionImg.style.width = '120px';
+      questionImg.style.height = '120px';
+      questionImg.style.objectFit = 'contain';
+      questionImg.style.borderRadius = '10px';
+      questionImg.style.backgroundColor = 'white';
+      questionImg.style.padding = '10px';
+      questionImg.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+      
+      // Add error handling for question image
+      questionImg.onerror = function() {
+        this.style.display = 'none';
+      };
+      
+      questionContainer.appendChild(questionImg);
+    }
+    
+    questionEl.appendChild(questionContainer);
     
     optionsEl.innerHTML = '';
     
@@ -116,9 +157,24 @@ document.addEventListener('DOMContentLoaded', function() {
       imageOption.appendChild(label);
       
       imageOption.addEventListener('click', function() {
+        // Prevent changing answer if already answered
+        if (questionAnswered) {
+          return;
+        }
+        
         const allOptions = optionsEl.querySelectorAll('.image-option');
         allOptions.forEach(function(opt) {
           opt.classList.remove('selected', 'correct', 'incorrect');
+          // Remove any existing cross icons
+          const existingCross = opt.querySelector('.cross-icon');
+          if (existingCross) {
+            existingCross.remove();
+          }
+          // Remove any existing check icons
+          const existingCheck = opt.querySelector('.check-icon');
+          if (existingCheck) {
+            existingCheck.remove();
+          }
         });
         
         imageOption.classList.add('selected');
@@ -131,29 +187,53 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     selectedOption = null;
+    questionAnswered = false; // Reset for new question
 
     funFactEl.style.display = 'none';
     
     prevBtn.disabled = currentQuestion === 0;
-    nextBtn.disabled = currentQuestion === 2;
-
+    nextBtn.disabled = currentQuestion === quizData.length - 1;
   }
   
   function checkAnswer() {
     if (selectedOption === null) return;
     
     const options = optionsEl.querySelectorAll('.image-option');
+    const correctIndex = quizData[currentQuestion].correctIndex;
     
     clearResultIndicators();
     
-    options[quizData[currentQuestion].correctIndex].classList.add('correct');
+    // Mark correct answer and add check icon
+    options[correctIndex].classList.add('correct');
+    addCheckToOption(options[correctIndex]);
     
-    if (selectedOption !== quizData[currentQuestion].correctIndex) {
+    // If answer is incorrect, mark it and add cross
+    if (selectedOption !== correctIndex) {
       options[selectedOption].classList.add('incorrect');
+      addCrossToOption(options[selectedOption]);
     }
+    
+    // Set question as answered to prevent further changes
+    questionAnswered = true;
     
     funFactTextEl.textContent = quizData[currentQuestion].funFact;
     funFactEl.style.display = 'block';
+  }
+  
+  function addCrossToOption(optionElement) {
+    const crossIcon = document.createElement('div');
+    crossIcon.className = 'cross-icon';
+    crossIcon.innerHTML = '✕';
+    
+    optionElement.appendChild(crossIcon);
+  }
+  
+  function addCheckToOption(optionElement) {
+    const checkIcon = document.createElement('div');
+    checkIcon.className = 'check-icon';
+    checkIcon.innerHTML = '✓';
+    
+    optionElement.appendChild(checkIcon);
   }
   
   prevBtn.addEventListener('click', function() {
@@ -176,6 +256,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const options = optionsEl.querySelectorAll('.image-option');
     options.forEach(function(opt) {
       opt.classList.remove('correct', 'incorrect');
+      const crossIcon = opt.querySelector('.cross-icon');
+      if (crossIcon) {
+        crossIcon.remove();
+      }
+      const checkIcon = opt.querySelector('.check-icon');
+      if (checkIcon) {
+        checkIcon.remove();
+      }
     });
   }
   
