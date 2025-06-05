@@ -145,7 +145,7 @@ p {
   right: 0;
   transform: translateY(-50%);
   width: 70px;
-  height: 180px;
+  height: 200px;
   background-color: #588739;
   border-radius: 0 12px 12px 0;
   display: flex;
@@ -546,7 +546,7 @@ p {
   
   .tab-pull {
     width: 60px;
-    height: 120px;
+    height: 180px;
     font-size: 0.9rem;
   }
   
@@ -644,7 +644,7 @@ p {
   
   .tab-pull {
     width: 50px;
-    height: 100px;
+    height: 170px;
     font-size: 0.8rem;
   }
   
